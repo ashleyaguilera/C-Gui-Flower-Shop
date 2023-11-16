@@ -1,0 +1,183 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Program3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+        //SS2202
+        //Program 3
+        //Due 4/1/22
+        //CIS 199-03
+        //This program is used to explore the use of parallel arrays and range matching
+        private void calcButton_Click(object sender, EventArgs e)
+        {
+            string[] gardentype =  //sets the array for the different garden types
+            {
+                "Premium",
+                "Standard",
+                "Discount"
+
+            };
+
+            double[] baserate = //parallel array to the garden type
+            {
+                1.1,
+                1,
+                0.90
+            };
+
+            int[] entreeitemnumber = //array for the flower item number that the person can input
+            {
+                10001,
+                10002,
+                10003,
+                10004,
+                10005,
+                10006,
+                10007
+            };
+
+            
+
+            double[] flowercosts = //parallel array for flower costs
+            {
+                7.87, 
+                9.51,
+                10.73,
+                9.99,
+                11.99,
+                5.00,
+                4.58
+
+            };
+
+            double[] flowerquantity = //sets the range of the flower quantities for the flowers to be able to receive discount
+            {
+             1,
+             6,
+             16,
+             21
+            };
+
+            double[] percentage = //parallel array 
+            {
+                1.00,
+                0.95,
+                0.90,
+                0.85
+            };
+
+
+
+
+
+
+            bool flowerFound = false; //bool conditions for the flower name to be found for user input
+            bool gardenFound = false; //bool conditions for the garden found for user input
+            bool qtyFound = false; //bool condition for the quantity input for user input
+
+            double item; //declares item as variable
+            double quantity; //declares quantity as variable
+            double price; //declares price as variable
+            double total; //delcares total as variable
+            double adjustedamount; //declares the total adjusted amount
+            double baseadjusted; //declares the based adjust amount
+            double flowercoststot; //declares the flowers total
+            double discount; //declares discount as a variable
+            double quantityprice; //declares quantity price
+            quantityprice = 0; //initializer for the variable 
+            baseadjusted = 0; //initializer for the variable
+
+            if (double.TryParse(itemInput.Text, out item) && !flowerFound); //translates the user input into item to be used and sentinnel value to limit only to those flowers
+            {
+                if (double.TryParse(quantityInput.Text, out quantity) && quantity >= 0); //translates the user input into quantity to be used and makes sure a quantity of only more than zero is allowed
+                {
+                    if (gardenCombobox.SelectedIndex >= 0) //conditional statement for the combobox to make sure the index is above one
+                    {
+                        for (int x = 0; x < gardentype.Length; x++) //allows the loop to go through the array and make a match
+                        {
+                            if (gardenCombobox.Text == gardentype[x] && !gardenFound) //if true allows for the next step for garden(conditional statements) and sentinnel value for garden to limit to those garden types
+                            {
+                                gardenFound = true;  //conditional if true, then it allows for the next statement
+                                baseadjusted = baserate[x]; //sets the quantity amount to the amounts in array
+                            }
+                        }
+                        for (int i = 0; i < entreeitemnumber.Length && !flowerFound; i++) //allows the loop to go through the array and make a match
+                        {
+                            if (item == entreeitemnumber[i]) //if true allows for the next step for item number(conditional statements)
+                            {
+                                flowerFound = true;  //conditional if true, then it allows for the next statement
+                                price = flowercosts[i]; //sets the quantity amount to the amounts in array
+
+
+                                for (int y = flowerquantity.Length - 1; y >= 0 && !qtyFound; --y) //allows the loop to go through the array and make a match
+                                {
+                                    if (flowerquantity[y] <= quantity) //if true allows for the next step for flower quantity(conditional statements)
+                                    {
+                                        qtyFound = true; //conditional if true, then it allows for the next statement
+                                        quantityprice = percentage[y]; //sets the quantity amount to the amounts in array
+                                    }
+
+                                }
+
+                                flowercoststot = price * quantity; // equations for flower costs
+                                adjustedamount = flowercoststot * baseadjusted; // equation for total adjusted amount
+                                discount = 1 - quantityprice; //equation for the discounted amount 
+                                total = adjustedamount * quantityprice; //equation for total amount
+                                flowerscostOutput.Text = $"{flowercoststot:C}"; //outputs the amount in currency format
+                                baseOutput.Text = $"{adjustedamount:C}"; //outputs the amount in currency format
+                                totalOutput.Text = $"{total:C}"; //outputs the amount in currency format
+                                discountOutput.Text = $"{discount:P}"; //outputs the discount in percentage format
+
+                            }
+                            else
+                                MessageBox.Show("Error"); //shows error message if something not within the conditions is inputted
+                        }
+                        
+                    }
+                    else
+                        MessageBox.Show("Error"); //shows error message if something not within the conditions is inputted
+
+                }
+               
+
+
+
+
+
+
+
+
+            }
+
+
+        }
+
+        private void discountOutput_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
